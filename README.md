@@ -53,7 +53,7 @@ components.json          Konfigurasi shadcn
 src/components/ui        Komponen shadcn/ui lokal
 src/lib/utils.ts         Helper cn() untuk className
 src/index.css            Theme token dan Tailwind v4 tokens
-src/App.tsx              Landing page, login, dan register
+src/App.tsx              Routing ringan, landing page, halaman produk, pricing, customers, contact, login, register
 public/nusaflow-logo.png Logo yang dipakai navbar dan footer
 ```
 
@@ -74,6 +74,24 @@ Komponen shadcn yang dipakai:
 - `Avatar`
 - `Progress`
 - `Separator`
+
+## Halaman Yang Tersedia
+
+Project ini tidak lagi hanya single page. Routing dibuat ringan berdasarkan `window.location.pathname`, tanpa React Router, supaya tetap mudah dipelajari.
+
+Halaman:
+
+```text
+/           Landing page
+/product    Product overview
+/pricing    Pricing page
+/customers  Customer/use case page
+/contact    Contact page
+/login      Login page
+/register   Register page
+```
+
+Jika nanti project berkembang menjadi aplikasi besar, routing bisa dipindah ke React Router atau Next.js App Router. Untuk demo landing page ini, path routing sederhana sudah cukup.
 
 ## Cara Menambah Komponen ShadCN
 
@@ -193,9 +211,11 @@ public/nusaflow-logo.png
 
 File asli upload `NusaFlow-Logo.png` di-root project di-ignore agar tidak ikut push sebagai duplikat.
 
-## Gitignore
+## Local Ignore
 
-File `.gitignore` sudah dibuat agar yang tidak penting tidak ikut push:
+File `.gitignore` dipakai lokal saja dan tidak perlu ikut di-push. Agar Git lokal juga mengabaikan `.gitignore`, project ini memakai `.git/info/exclude`.
+
+Isi ignore lokal yang disarankan:
 
 ```text
 node_modules
@@ -221,5 +241,4 @@ Yang sebaiknya di-push:
 - `vite.config.ts`
 - `tsconfig*.json`
 - `index.html`
-- `.gitignore`
 - `README.md`

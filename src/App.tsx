@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -75,15 +75,14 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type Route = "landing" | "login" | "register";
+type Route = "landing" | "product" | "pricing" | "customers" | "contact" | "login" | "register";
 type Metric = [label: string, value: string, progress: number];
 
 const navItems = [
-  ["Solusi", "#solusi"],
-  ["Komponen", "#komponen"],
-  ["Workflow", "#workflow"],
-  ["Harga", "#harga"],
-  ["FAQ", "#faq"],
+  ["Product", "/product"],
+  ["Pricing", "/pricing"],
+  ["Customers", "/customers"],
+  ["Contact", "/contact"],
 ];
 
 const pains = [
@@ -235,15 +234,19 @@ const authHighlights = [
   ["Team access", "8 roles", ShieldCheck],
 ];
 
-function getRouteFromHash(): Route {
-  if (window.location.hash === "#login") return "login";
-  if (window.location.hash === "#register") return "register";
+function getRouteFromLocation(): Route {
+  if (window.location.pathname === "/product") return "product";
+  if (window.location.pathname === "/pricing") return "pricing";
+  if (window.location.pathname === "/customers") return "customers";
+  if (window.location.pathname === "/contact") return "contact";
+  if (window.location.pathname === "/login") return "login";
+  if (window.location.pathname === "/register") return "register";
   return "landing";
 }
 
 function Logo() {
   return (
-    <a href="#hero" className="flex items-center gap-2 text-ink" aria-label="NusaFlow home">
+    <a href="/" className="flex items-center gap-2 text-ink" aria-label="NusaFlow home">
       <span className="flex h-9 w-11 items-center justify-center overflow-hidden rounded-[18px] bg-ink">
         <img
           src="/nusaflow-logo.png"
@@ -391,10 +394,10 @@ function Header() {
         <div className="hidden items-center gap-2 md:flex">
           <SearchTrigger />
           <Button asChild variant="ghost">
-            <a href="#login">Login</a>
+            <a href="/login">Login</a>
           </Button>
           <Button asChild variant="outline">
-            <a href="#register">Register</a>
+            <a href="/register">Register</a>
           </Button>
           <DemoDialog />
         </div>
@@ -421,10 +424,10 @@ function Header() {
               ))}
               <Separator className="my-2" />
               <Button asChild variant="secondary">
-                <a href="#login">Login</a>
+                <a href="/login">Login</a>
               </Button>
               <Button asChild>
-                <a href="#register">Register</a>
+                <a href="/register">Register</a>
               </Button>
             </div>
           </SheetContent>
@@ -509,6 +512,276 @@ function DashboardTab({ items }: { items: Metric[] }) {
         </Card>
       ))}
     </div>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="border-t border-hairline bg-paper py-10 text-mid-gray">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <div>
+          <Logo />
+          <p className="mt-3 max-w-md text-sm">
+            Professional shadcn/ui pages built with the design.md monochrome system.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-4 text-sm">
+          {navItems.map(([item, href]) => (
+            <a key={item} href={href} className="hover:text-ink">
+              {item}
+            </a>
+          ))}
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function PageFrame({
+  eyebrow,
+  title,
+  copy,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  children: ReactNode;
+}) {
+  return (
+    <main className="min-h-screen bg-canvas text-ink">
+      <Header />
+      <section className="border-b border-hairline pt-16">
+        <div className="mx-auto max-w-[1280px] px-4 py-20 sm:px-6 lg:px-8">
+          <Badge>{eyebrow}</Badge>
+          <h1 className="mt-5 max-w-3xl text-[48px] font-semibold leading-[1.1] tracking-[-2.4px]">
+            {title}
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-[1.5] text-mid-gray">{copy}</p>
+        </div>
+      </section>
+      {children}
+      <SiteFooter />
+    </main>
+  );
+}
+
+function ProductPage() {
+  return (
+    <PageFrame
+      eyebrow="Product"
+      title="A compact operating system for daily business work."
+      copy="NusaFlow turns invoices, orders, customer messages, and approval decisions into one predictable workspace."
+    >
+      <section className="py-20">
+        <div className="mx-auto grid max-w-[1280px] gap-4 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+          <ProductMockup />
+          <div className="grid gap-4">
+            {features.slice(0, 4).map((feature) => (
+              <Card key={feature.title}>
+                <CardHeader>
+                  <feature.icon className="size-5 text-ink" />
+                  <CardTitle>{feature.title}</CardTitle>
+                  <CardDescription>{feature.copy}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="border-y border-hairline bg-surface-alt py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Modules"
+            title="Everything is organized as reusable operational modules."
+          />
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
+            <Card>
+              <StatBlock label="Automation" value="12K" progress={84} />
+            </Card>
+            <Card>
+              <StatBlock label="Invoices tracked" value="8.4K" progress={78} />
+            </Card>
+            <Card>
+              <StatBlock label="Teams onboarded" value="420" progress={64} />
+            </Card>
+          </div>
+        </div>
+      </section>
+    </PageFrame>
+  );
+}
+
+function PricingPage() {
+  const [annual, setAnnual] = useState(true);
+  const activePrice = (plan: (typeof plans)[number]) => {
+    if (plan.name === "Scale") return "Custom";
+    return `Rp${annual ? plan.annual : plan.monthly}rb`;
+  };
+
+  return (
+    <PageFrame
+      eyebrow="Pricing"
+      title="Simple plans for teams that want operational clarity."
+      copy="Start with a compact workflow setup, then scale into approval, audit, and integration controls."
+    >
+      <section className="py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex w-fit items-center gap-3 rounded-[24px] border border-hairline bg-paper p-3 shadow-subtle">
+            <span className={!annual ? "text-ink" : "text-mid-gray"}>Monthly</span>
+            <Switch checked={annual} onCheckedChange={setAnnual} aria-label="Toggle annual billing" />
+            <span className={annual ? "text-ink" : "text-mid-gray"}>Annual</span>
+            <Badge variant="secondary">Save 20%</Badge>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {plans.map((plan) => (
+              <Card key={plan.name} className={plan.featured ? "border-ink" : ""}>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-3">
+                    <CardTitle>{plan.name}</CardTitle>
+                    {plan.featured ? <Badge>Popular</Badge> : null}
+                  </div>
+                  <div className="mt-4">
+                    <span className="text-[36px] font-semibold leading-[1.11] tracking-[-0.9px]">
+                      {activePrice(plan)}
+                    </span>
+                    {plan.name !== "Scale" ? <span className="text-mid-gray">/month</span> : null}
+                  </div>
+                  <CardDescription>{plan.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {plan.items.map((item) => (
+                      <li key={item} className="flex gap-2 text-sm">
+                        <Check className="mt-0.5 size-4 shrink-0 text-ink" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full" variant={plan.featured ? "default" : "outline"}>
+                    Select plan
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageFrame>
+  );
+}
+
+function CustomersPage() {
+  return (
+    <PageFrame
+      eyebrow="Customers"
+      title="Built for finance, sales, warehouse, and operators."
+      copy="Each team sees the same source of truth, with just enough interface to make the next action clear."
+    >
+      <section className="py-20">
+        <div className="mx-auto grid max-w-[1280px] gap-4 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+          {testimonials.map((item) => (
+            <Card key={item.name}>
+              <CardContent>
+                <p className="text-sm leading-[1.63]">"{item.quote}"</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback className="bg-canvas text-ink">{item.initials}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="text-sm text-mid-gray">{item.role}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+      <section className="border-y border-hairline bg-surface-alt py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Use cases" title="Operational patterns we support." />
+          <div className="mt-12 grid gap-4 md:grid-cols-2">
+            {[
+              ["Invoice collection", "Finance teams monitor due dates and follow-up queues."],
+              ["Order fulfillment", "Warehouse teams track shipping readiness and returns."],
+              ["Customer response", "Sales and support keep one customer timeline."],
+              ["Approval audit", "Managers review discounts, refunds, and access changes."],
+            ].map(([title, copy]) => (
+              <Card key={title}>
+                <CardHeader>
+                  <CardTitle>{title}</CardTitle>
+                  <CardDescription>{copy}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageFrame>
+  );
+}
+
+function ContactPage() {
+  return (
+    <PageFrame
+      eyebrow="Contact"
+      title="Talk through your workflow before changing tools."
+      copy="Use this page as a professional contact surface: short form, clear expectations, and no noisy copy."
+    >
+      <section className="py-20">
+        <div className="mx-auto grid max-w-[1280px] gap-4 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Contact details</CardTitle>
+              <CardDescription>Response within one business day.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="rounded-[10px] bg-canvas p-4">
+                <p className="font-medium">Email</p>
+                <p className="text-mid-gray">hello@nusaflow.example</p>
+              </div>
+              <div className="rounded-[10px] bg-canvas p-4">
+                <p className="font-medium">Office</p>
+                <p className="text-mid-gray">Jakarta, Indonesia</p>
+              </div>
+              <Button variant="destructive">
+                <Trash2 />
+                Revoke demo access
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Request consultation</CardTitle>
+              <CardDescription>Tell us what process you want to clean up.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="contact-name">Name</Label>
+                <Input id="contact-name" placeholder="Ayu Lestari" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contact-email">Email</Label>
+                <Input id="contact-email" type="email" placeholder="ayu@company.co" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contact-workflow">Workflow</Label>
+                <Input id="contact-workflow" placeholder="Invoice follow-up, order tracking, approval" />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button className="w-full">
+                Submit request
+                <ArrowRight />
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      </section>
+    </PageFrame>
   );
 }
 
@@ -758,9 +1031,9 @@ function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col justify-center gap-2 sm:flex-row">
             <DemoDialog />
-            <Button asChild variant="secondary">
-              <a href="#register">Create account</a>
-            </Button>
+              <Button asChild variant="secondary">
+                <a href="/register">Create account</a>
+              </Button>
           </div>
         </div>
       </section>
@@ -823,7 +1096,7 @@ function AuthPage({ mode }: { mode: "login" | "register" }) {
             <div className="mb-8 flex items-center justify-between">
               <Logo />
               <Button asChild variant="secondary">
-                <a href="#hero">
+                <a href="/">
                   <ArrowLeft />
                   Home
                 </a>
@@ -872,7 +1145,7 @@ function AuthPage({ mode }: { mode: "login" | "register" }) {
                     {isRegister ? "I agree to terms" : "Remember me"}
                   </Label>
                   {!isRegister ? (
-                    <a href="#login" className="text-ink hover:underline">
+                    <a href="/login" className="text-ink hover:underline">
                       Forgot password?
                     </a>
                   ) : null}
@@ -893,7 +1166,7 @@ function AuthPage({ mode }: { mode: "login" | "register" }) {
               </CardContent>
               <CardFooter className="justify-center text-sm text-mid-gray">
                 {isRegister ? "Already have an account?" : "No account yet?"}
-                <a href={isRegister ? "#login" : "#register"} className="ml-1 font-medium text-ink hover:underline">
+                <a href={isRegister ? "/login" : "/register"} className="ml-1 font-medium text-ink hover:underline">
                   {isRegister ? "Login" : "Register"}
                 </a>
               </CardFooter>
@@ -910,14 +1183,18 @@ function AuthPage({ mode }: { mode: "login" | "register" }) {
 }
 
 function App() {
-  const [route, setRoute] = useState<Route>(getRouteFromHash);
+  const [route, setRoute] = useState<Route>(getRouteFromLocation);
 
   useEffect(() => {
-    const syncRoute = () => setRoute(getRouteFromHash());
-    window.addEventListener("hashchange", syncRoute);
-    return () => window.removeEventListener("hashchange", syncRoute);
+    const syncRoute = () => setRoute(getRouteFromLocation());
+    window.addEventListener("popstate", syncRoute);
+    return () => window.removeEventListener("popstate", syncRoute);
   }, []);
 
+  if (route === "product") return <ProductPage />;
+  if (route === "pricing") return <PricingPage />;
+  if (route === "customers") return <CustomersPage />;
+  if (route === "contact") return <ContactPage />;
   if (route === "login") return <AuthPage mode="login" />;
   if (route === "register") return <AuthPage mode="register" />;
 
