@@ -53,7 +53,12 @@ components.json          Konfigurasi shadcn
 src/components/ui        Komponen shadcn/ui lokal
 src/lib/utils.ts         Helper cn() untuk className
 src/index.css            Theme token dan Tailwind v4 tokens
-src/App.tsx              Routing ringan, landing page, halaman produk, pricing, customers, contact, login, register
+src/App.tsx              Router provider
+src/routes.tsx           Route definitions dengan React Router
+src/data/site.ts         Data konten terpusat
+src/layouts              Layout reusable
+src/pages                Halaman route
+src/components/marketing Komponen section/layout marketing
 public/nusaflow-logo.png Logo yang dipakai navbar dan footer
 ```
 
@@ -77,7 +82,7 @@ Komponen shadcn yang dipakai:
 
 ## Halaman Yang Tersedia
 
-Project ini tidak lagi hanya single page. Routing dibuat ringan berdasarkan `window.location.pathname`, tanpa React Router, supaya tetap mudah dipelajari.
+Project ini tidak lagi hanya single page. Routing memakai `react-router-dom` agar struktur lebih rapi dan siap dikembangkan.
 
 Halaman:
 
@@ -91,7 +96,65 @@ Halaman:
 /register   Register page
 ```
 
-Jika nanti project berkembang menjadi aplikasi besar, routing bisa dipindah ke React Router atau Next.js App Router. Untuk demo landing page ini, path routing sederhana sudah cukup.
+Route definitions ada di:
+
+```text
+src/routes.tsx
+```
+
+Catatan deployment: karena ini SPA dengan Browser Router, hosting production perlu fallback semua route ke `index.html`. Di Vite dev server ini sudah otomatis.
+
+Layout umum marketing ada di:
+
+```text
+src/layouts/marketing-layout.tsx
+```
+
+## Struktur Best Practice
+
+Project sudah dipisah berdasarkan tanggung jawab:
+
+```text
+src/
+  App.tsx
+  routes.tsx
+  data/
+    site.ts
+  layouts/
+    marketing-layout.tsx
+    page-frame.tsx
+  pages/
+    home.tsx
+    product.tsx
+    pricing.tsx
+    customers.tsx
+    contact.tsx
+    auth.tsx
+  components/
+    marketing/
+    ui/
+  lib/
+    utils.ts
+```
+
+Prinsip yang dipakai:
+
+- `src/components/ui`: hanya komponen shadcn dasar.
+- `src/components/marketing`: komponen reusable milik website.
+- `src/pages`: satu file per halaman route.
+- `src/layouts`: shell/layout yang dipakai banyak halaman.
+- `src/data/site.ts`: konten/data statis agar tidak tersebar di banyak komponen.
+- `src/routes.tsx`: konfigurasi routing terpusat.
+
+## Audit Dependency
+
+Verifikasi high severity:
+
+```bash
+npm audit --audit-level=high
+```
+
+Project memakai `react-router-dom@6.30.4` secara pinned. Versi ini dipilih untuk menghindari advisory high dari React Router v7/RSC mode. Saat ini npm masih melaporkan advisory moderate dari package React Router tanpa fix tersedia; project ini tidak memakai SSR hydration dan semua link/navigasi dibuat statis internal.
 
 ## Cara Menambah Komponen ShadCN
 
