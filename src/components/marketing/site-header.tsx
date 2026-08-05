@@ -52,6 +52,7 @@ function getInitials(name: string) {
 export function SiteHeader() {
   const { user, isCheckingSession, logout } = useAuth();
   const navigate = useNavigate();
+  const dashboardHref = user?.role === "ADMIN" ? "/admin" : "/app";
 
   async function handleLogout() {
     await logout();
@@ -127,15 +128,15 @@ export function SiteHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/product">
+                  <Link to={dashboardHref}>
                     <User />
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/product">
+                  <Link to={dashboardHref}>
                     <LayoutDashboard />
-                    Dashboard
+                    {user.role === "ADMIN" ? "Admin CMS" : "Dashboard"}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -198,7 +199,7 @@ export function SiteHeader() {
                   </div>
                   <SheetClose asChild>
                     <Button asChild variant="secondary">
-                      <Link to="/product">Profile</Link>
+                      <Link to={dashboardHref}>{user.role === "ADMIN" ? "Admin CMS" : "Dashboard"}</Link>
                     </Button>
                   </SheetClose>
                   <SheetClose asChild>

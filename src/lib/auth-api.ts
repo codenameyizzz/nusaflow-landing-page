@@ -2,7 +2,7 @@ export type PublicUser = {
   id: string;
   email: string;
   name: string;
-  role: "OWNER" | "MEMBER";
+  role: "ADMIN" | "USER";
   createdAt: string;
   updatedAt: string;
 };
@@ -77,5 +77,20 @@ export const authApi = {
   },
   me() {
     return request<AuthResponse>("/auth/me");
+  },
+};
+
+export type AdminOverview = {
+  stats: {
+    totalUsers: number;
+    adminUsers: number;
+    regularUsers: number;
+  };
+  latestUsers: PublicUser[];
+};
+
+export const adminApi = {
+  overview() {
+    return request<AdminOverview>("/admin/overview");
   },
 };

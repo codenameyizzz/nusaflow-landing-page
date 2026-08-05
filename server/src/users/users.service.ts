@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from "@nestjs/common";
-import type { User } from "@prisma/client";
+import type { User, UserRole } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+import { toPublicUser } from "./user.presenter";
 
 type CreateUserInput = {
   email: string;
@@ -38,5 +39,24 @@ export class UsersService {
         passwordHash: input.passwordHash,
       },
     });
+  }
+
+  countUsers() {
+    return this.prisma.user.count();
+  }
+
+  countUsersByRole(role: UserRole) {
+    return this.prisma.user.count({
+      where: { role },
+    });
+  }
+
+  async findRecentUsers(take = 8) {
+    const users = await this.prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+      take,
+    });
+
+    return users.map(toPublicUser);
   }
 }

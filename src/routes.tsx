@@ -1,5 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { MarketingLayout } from "@/layouts/marketing-layout";
+import { AdminDashboardPage } from "@/pages/admin-dashboard";
+import { AppDashboardPage } from "@/pages/app-dashboard";
 import { AuthPage } from "@/pages/auth";
 import { ContactPage } from "@/pages/contact";
 import { CustomersPage } from "@/pages/customers";
@@ -16,6 +19,19 @@ export const router = createBrowserRouter([
       { path: "/pricing", element: <PricingPage /> },
       { path: "/customers", element: <CustomersPage /> },
       { path: "/contact", element: <ContactPage /> },
+    ],
+  },
+  {
+    element: <MarketingLayout />,
+    children: [
+      {
+        element: <ProtectedRoute />,
+        children: [{ path: "/app", element: <AppDashboardPage /> }],
+      },
+      {
+        element: <ProtectedRoute allowedRoles={["ADMIN"]} />,
+        children: [{ path: "/admin", element: <AdminDashboardPage /> }],
+      },
     ],
   },
   { path: "/login", element: <AuthPage mode="login" /> },

@@ -28,15 +28,34 @@ POST /api/auth/register
 POST /api/auth/login
 POST /api/auth/logout
 GET  /api/auth/me
+GET  /api/admin/overview
 GET  /api/health
 ```
 
 JWT disimpan di httpOnly cookie, bukan localStorage.
 
+## Roles
+
+Role tersedia:
+
+```text
+ADMIN
+USER
+```
+
+Register selalu membuat akun `USER`. Untuk development, promote akun menjadi admin lewat database:
+
+```sql
+UPDATE "User" SET "role" = 'ADMIN' WHERE "email" = 'email-kamu@example.com';
+```
+
+Route `/api/admin/*` diproteksi dengan `JwtAuthGuard` dan `RolesGuard`.
+
 ## Struktur
 
 ```text
 src/
+  admin/
   auth/
     decorators/
     dto/

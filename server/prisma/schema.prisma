@@ -8,8 +8,8 @@ datasource db {
 }
 
 enum UserRole {
-  OWNER
-  MEMBER
+  ADMIN
+  USER
 }
 
 model User {
@@ -17,7 +17,7 @@ model User {
   email        String   @unique
   name         String
   passwordHash String
-  role         UserRole @default(OWNER)
+  role         UserRole @default(USER)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

@@ -94,6 +94,43 @@ GET  /api/health
 
 Auth menggunakan JWT di httpOnly cookie, bukan localStorage.
 
+Endpoint admin:
+
+```text
+GET /api/admin/overview
+```
+
+Endpoint admin diproteksi JWT cookie dan role `ADMIN`.
+
+## Role User Dan Admin
+
+Role yang dipakai:
+
+```text
+ADMIN  Akses CMS admin di /admin
+USER   Akses dashboard user di /app
+```
+
+Register dari website selalu membuat akun `USER`. Untuk menjadikan akun sebagai admin saat development, jalankan PostgreSQL/Prisma migration dulu:
+
+```bash
+cd server
+npm run prisma:migrate
+```
+
+Lalu promote salah satu email lewat `psql`:
+
+```bash
+docker exec -it nusaflow-postgres psql -U postgres -d nusaflow
+```
+
+```sql
+UPDATE "User" SET "role" = 'ADMIN' WHERE "email" = 'email-kamu@example.com';
+SELECT id, email, name, role FROM "User";
+```
+
+Setelah login ulang, akun `ADMIN` akan diarahkan ke `/admin`, sedangkan akun `USER` diarahkan ke `/app`.
+
 ## ShadCN Di Project Ini
 
 shadcn/ui sudah dipasang lewat CLI lokal:
@@ -158,6 +195,8 @@ Halaman:
 /pricing    Pricing page
 /customers  Customer/use case page
 /contact    Contact page
+/app        User dashboard
+/admin      Admin CMS dashboard
 /login      Login page
 /register   Register page
 ```

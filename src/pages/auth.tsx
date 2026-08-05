@@ -49,7 +49,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
         : await auth.login({ email, password });
 
       setStatusMessage(`Berhasil masuk sebagai ${result.name}.`);
-      window.setTimeout(() => navigate("/product"), 500);
+      window.setTimeout(() => navigate(result.role === "ADMIN" ? "/admin" : "/app"), 500);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Auth request gagal.");
     } finally {
