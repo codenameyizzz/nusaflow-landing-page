@@ -29,4 +29,9 @@ export class AdminController {
       latestUsers,
     };
   }
+
+  @Get("users")
+  users() {
+    return this.usersService.findUsersForAdmin();
+  }
 }

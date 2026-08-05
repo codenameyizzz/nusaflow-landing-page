@@ -59,4 +59,12 @@ export class UsersService {
 
     return users.map(toPublicUser);
   }
+
+  async findUsersForAdmin() {
+    const users = await this.prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    return users.map(toPublicUser);
+  }
 }

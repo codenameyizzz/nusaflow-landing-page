@@ -96,6 +96,9 @@ export const adminApi = {
   overview() {
     return request<AdminOverview>("/admin/overview");
   },
+  users() {
+    return request<PublicUser[]>("/admin/users");
+  },
 };
 
 export type Product = {

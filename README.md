@@ -98,6 +98,7 @@ Endpoint admin:
 
 ```text
 GET    /api/admin/overview
+GET    /api/admin/users
 GET    /api/admin/products
 POST   /api/admin/products
 PATCH  /api/admin/products/:id
@@ -140,10 +141,20 @@ Setelah login ulang, akun `ADMIN` akan diarahkan ke `/admin`, sedangkan akun `US
 
 ## CMS Produk
 
-Admin bisa mengelola produk dari halaman:
+Admin area sekarang memakai layout khusus dengan sidebar:
 
 ```text
 /admin
+/admin/products
+/admin/users
+/admin/activity
+/admin/settings
+```
+
+Produk bisa dikelola dari:
+
+```text
+/admin/products
 ```
 
 Fitur yang tersedia:
@@ -251,6 +262,10 @@ Halaman:
 /contact    Contact page
 /app        User dashboard
 /admin      Admin CMS dashboard
+/admin/products Product CMS
+/admin/users    User management
+/admin/activity Activity timeline
+/admin/settings Admin settings
 /login      Login page
 /register   Register page
 ```

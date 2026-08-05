@@ -29,6 +29,7 @@ POST /api/auth/login
 POST /api/auth/logout
 GET  /api/auth/me
 GET  /api/admin/overview
+GET  /api/admin/users
 GET  /api/admin/products
 POST /api/admin/products
 PATCH /api/admin/products/:id

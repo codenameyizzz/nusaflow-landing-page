@@ -1,7 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute } from "@/components/auth/protected-route";
+import { AdminLayout } from "@/layouts/admin-layout";
 import { MarketingLayout } from "@/layouts/marketing-layout";
+import { AdminActivityPage } from "@/pages/admin-activity";
 import { AdminDashboardPage } from "@/pages/admin-dashboard";
+import { AdminProductsPage } from "@/pages/admin-products";
+import { AdminSettingsPage } from "@/pages/admin-settings";
+import { AdminUsersPage } from "@/pages/admin-users";
 import { AppDashboardPage } from "@/pages/app-dashboard";
 import { AuthPage } from "@/pages/auth";
 import { ContactPage } from "@/pages/contact";
@@ -28,9 +33,21 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [{ path: "/app", element: <AppDashboardPage /> }],
       },
+    ],
+  },
+  {
+    element: <ProtectedRoute allowedRoles={["ADMIN"]} />,
+    children: [
       {
-        element: <ProtectedRoute allowedRoles={["ADMIN"]} />,
-        children: [{ path: "/admin", element: <AdminDashboardPage /> }],
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AdminDashboardPage /> },
+          { path: "products", element: <AdminProductsPage /> },
+          { path: "users", element: <AdminUsersPage /> },
+          { path: "activity", element: <AdminActivityPage /> },
+          { path: "settings", element: <AdminSettingsPage /> },
+        ],
       },
     ],
   },

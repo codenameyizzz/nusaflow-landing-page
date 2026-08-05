@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
-import { Activity, ShieldCheck, UserCog, Users } from "lucide-react";
-import { ProductCms } from "@/components/admin/product-cms";
+import { Link } from "react-router-dom";
+import { Activity, Package, Settings, ShieldCheck, UserCog, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { adminApi, type AdminOverview } from "@/lib/auth-api";
 
-const cmsActions = ["User management", "Content sections", "Billing rules", "Audit activity"];
+const adminModules = [
+  { label: "Products", href: "/admin/products", icon: Package, copy: "Kelola catalog produk dan gambar." },
+  { label: "Users", href: "/admin/users", icon: Users, copy: "Lihat user dan role akses." },
+  { label: "Activity", href: "/admin/activity", icon: Activity, copy: "Pantau perubahan user dan produk." },
+  { label: "Settings", href: "/admin/settings", icon: Settings, copy: "Konfigurasi workspace admin." },
+];
 
 export function AdminDashboardPage() {
   const [overview, setOverview] = useState<AdminOverview | null>(null);
@@ -28,16 +34,15 @@ export function AdminDashboardPage() {
   ];
 
   return (
-    <section className="border-b border-hairline pt-16">
-      <div className="mx-auto max-w-[1280px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+    <div className="grid gap-4">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <Badge>Admin CMS</Badge>
-            <h1 className="mt-5 max-w-3xl text-[36px] font-semibold leading-[1.11] tracking-[-0.9px] sm:text-[48px] sm:leading-[1.1] sm:tracking-[-2.4px]">
-              Control panel untuk mengelola user dan operasi.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-[1.5] text-mid-gray">
-              Area ini hanya bisa dibuka oleh akun dengan role admin.
+            <Badge>Overview</Badge>
+            <h2 className="mt-4 max-w-3xl text-[30px] font-semibold leading-[1.2] tracking-[-0.75px] sm:text-[36px] sm:leading-[1.11] sm:tracking-[-0.9px]">
+              Ringkasan CMS untuk mengelola operasi NusaFlow.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-[1.5] text-mid-gray">
+              Dashboard admin sekarang dipisah menjadi module products, users, activity, dan settings.
             </p>
           </div>
           <Badge variant="outline">Protected by role guard</Badge>
@@ -47,7 +52,7 @@ export function AdminDashboardPage() {
           <p className="mt-6 rounded-[18px] bg-paper px-4 py-3 text-sm text-ember shadow-subtle">{errorMessage}</p>
         ) : null}
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {stats.map(({ label, value, icon: Icon, progress }) => (
             <Card key={label}>
               <CardHeader>
@@ -65,11 +70,7 @@ export function AdminDashboardPage() {
           ))}
         </div>
 
-        <div className="mt-4">
-          <ProductCms />
-        </div>
-
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <Card>
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -105,21 +106,28 @@ export function AdminDashboardPage() {
           <Card>
             <div>
               <p className="text-[12px] font-medium uppercase leading-[1.33] tracking-[0.6px] text-mid-gray">
-                CMS
+                Modules
               </p>
               <h2 className="mt-2 text-[24px] font-semibold leading-[1.33] tracking-[-0.6px]">
-                Modul admin
+                Admin sections
               </h2>
             </div>
-            {cmsActions.map((action) => (
-              <div key={action} className="flex items-center gap-3 rounded-[18px] bg-canvas px-3 py-2 text-sm">
-                <Activity className="size-4 text-mid-gray" />
-                <span>{action}</span>
+            {adminModules.map(({ label, href, icon: Icon, copy }) => (
+              <div key={href} className="flex items-center justify-between gap-3 rounded-[18px] bg-canvas px-3 py-3 text-sm">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Icon className="size-4 shrink-0 text-mid-gray" />
+                  <div className="min-w-0">
+                    <p className="font-medium text-ink">{label}</p>
+                    <p className="truncate text-mid-gray">{copy}</p>
+                  </div>
+                </div>
+                <Button asChild variant="outline" size="sm">
+                  <Link to={href}>Open</Link>
+                </Button>
               </div>
             ))}
           </Card>
         </div>
-      </div>
-    </section>
+    </div>
   );
 }
