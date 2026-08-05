@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit --incremental false -p tsconfig.json",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "prisma:seed": "prisma db seed"
   },
   "dependencies": {
     "@nestjs/common": "latest",
@@ -29,6 +30,9 @@
     "passport-jwt": "latest",
     "reflect-metadata": "latest",
     "rxjs": "latest"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "devDependencies": {
     "@nestjs/cli": "latest",

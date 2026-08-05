@@ -65,6 +65,12 @@ Jalankan migration:
 npm run prisma:migrate
 ```
 
+Isi database dengan data contoh:
+
+```bash
+npm run prisma:seed
+```
+
 Jalankan backend:
 
 ```bash
@@ -200,6 +206,35 @@ server/uploads/products
 
 Folder ini masuk `.gitignore` karena berisi data runtime, bukan source code.
 
+## Seed Data
+
+Backend menyediakan seed idempotent di:
+
+```text
+server/prisma/seed.ts
+```
+
+Jalankan dari folder `server`:
+
+```bash
+npm run prisma:seed
+```
+
+Seed akan membuat:
+
+- Admin default
+- Sample users
+- Sample products published/draft
+
+Credential demo:
+
+```text
+Admin: admin@nusaflow.test / Admin12345
+User:  ops@nusaflow.test / User12345
+```
+
+Script memakai `upsert`, jadi aman dijalankan berulang tanpa membuat duplikat berdasarkan email user dan slug produk.
+
 ## ShadCN Di Project Ini
 
 shadcn/ui sudah dipasang lewat CLI lokal:
@@ -322,6 +357,7 @@ Backend:
 server/
   prisma/
     schema.prisma
+    seed.ts
   src/
     auth/
       decorators/

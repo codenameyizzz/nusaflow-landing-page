@@ -10,6 +10,7 @@ npm install
 copy .env.example .env
 npm run prisma:generate
 npm run prisma:migrate
+npm run prisma:seed
 npm run dev
 ```
 
@@ -77,6 +78,27 @@ Setelah schema berubah, jalankan:
 ```bash
 npm run prisma:migrate
 npm run prisma:generate
+```
+
+## Seed Data
+
+Seed berada di:
+
+```text
+prisma/seed.ts
+```
+
+Jalankan:
+
+```bash
+npm run prisma:seed
+```
+
+Credential demo:
+
+```text
+Admin: admin@nusaflow.test / Admin12345
+User:  ops@nusaflow.test / User12345
 ```
 
 ## Struktur
