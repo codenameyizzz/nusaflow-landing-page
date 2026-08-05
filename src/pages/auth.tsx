@@ -19,6 +19,8 @@ import { Separator } from "@/components/ui/separator";
 import { Logo } from "@/components/marketing/logo";
 import { useAuth } from "@/contexts/auth-context";
 
+type AuthFieldErrors = Partial<Record<"name" | "email" | "password" | "terms", string>>;
+
 export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const isRegister = mode === "register";
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<AuthFieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -35,9 +38,17 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
     event.preventDefault();
     setStatusMessage("");
     setErrorMessage("");
+    const validationErrors = validateAuthForm({
+      isRegister,
+      name,
+      email,
+      password,
+      acceptedTerms,
+    });
 
-    if (isRegister && !acceptedTerms) {
-      setErrorMessage("Setujui terms terlebih dahulu untuk membuat akun.");
+    setFieldErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length) {
       return;
     }
 
@@ -119,13 +130,18 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                         <Input
                           id="name"
                           value={name}
-                          onChange={(event) => setName(event.target.value)}
+                          onChange={(event) => {
+                            setName(event.target.value);
+                            setFieldErrors((current) => ({ ...current, name: undefined }));
+                          }}
                           placeholder="Nusa Retail"
                           className="pl-9"
+                          aria-invalid={Boolean(fieldErrors.name)}
                           minLength={2}
                           required
                         />
                       </div>
+                      {fieldErrors.name ? <AuthFieldError>{fieldErrors.name}</AuthFieldError> : null}
                     </div>
                   ) : null}
                   <div className="space-y-2">
@@ -135,13 +151,18 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                       <Input
                         id="email"
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) => {
+                          setEmail(event.target.value);
+                          setFieldErrors((current) => ({ ...current, email: undefined }));
+                        }}
                         type="email"
                         placeholder="nama@company.co"
                         className="pl-9"
+                        aria-invalid={Boolean(fieldErrors.email)}
                         required
                       />
                     </div>
+                    {fieldErrors.email ? <AuthFieldError>{fieldErrors.email}</AuthFieldError> : null}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
@@ -150,21 +171,29 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                       <Input
                         id="password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(event) => {
+                          setPassword(event.target.value);
+                          setFieldErrors((current) => ({ ...current, password: undefined }));
+                        }}
                         type="password"
                         placeholder="Minimal 8 karakter"
                         className="px-9"
+                        aria-invalid={Boolean(fieldErrors.password)}
                         minLength={8}
                         required
                       />
                       <Eye className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-mid-gray" />
                     </div>
+                    {fieldErrors.password ? <AuthFieldError>{fieldErrors.password}</AuthFieldError> : null}
                   </div>
                   <div className="flex items-center justify-between gap-4 text-sm">
                     <Label className="flex items-center gap-2 text-mid-gray">
                       <Checkbox
                         checked={isRegister ? acceptedTerms : undefined}
-                        onCheckedChange={(checked) => setAcceptedTerms(checked === true)}
+                        onCheckedChange={(checked) => {
+                          setAcceptedTerms(checked === true);
+                          setFieldErrors((current) => ({ ...current, terms: undefined }));
+                        }}
                       />
                       {isRegister ? "I agree to terms" : "Remember me"}
                     </Label>
@@ -174,6 +203,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                       </Link>
                     ) : null}
                   </div>
+                  {fieldErrors.terms ? <AuthFieldError>{fieldErrors.terms}</AuthFieldError> : null}
                   {errorMessage ? (
                     <p className="rounded-[18px] bg-canvas px-3 py-2 text-sm text-ember">{errorMessage}</p>
                   ) : null}
@@ -213,4 +243,45 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
       </div>
     </main>
   );
+}
+
+function validateAuthForm({
+  isRegister,
+  name,
+  email,
+  password,
+  acceptedTerms,
+}: {
+  isRegister: boolean;
+  name: string;
+  email: string;
+  password: string;
+  acceptedTerms: boolean;
+}) {
+  const errors: AuthFieldErrors = {};
+  const normalizedEmail = email.trim();
+
+  if (isRegister && name.trim().length < 2) {
+    errors.name = "Name minimal 2 karakter.";
+  }
+
+  if (!normalizedEmail) {
+    errors.email = "Email wajib diisi.";
+  } else if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+    errors.email = "Format email belum valid.";
+  }
+
+  if (password.length < 8) {
+    errors.password = "Password minimal 8 karakter.";
+  }
+
+  if (isRegister && !acceptedTerms) {
+    errors.terms = "Setujui terms terlebih dahulu untuk membuat akun.";
+  }
+
+  return errors;
+}
+
+function AuthFieldError({ children }: { children: string }) {
+  return <p className="text-xs leading-[1.33] text-ember">{children}</p>;
 }
