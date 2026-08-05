@@ -105,6 +105,8 @@ Endpoint admin:
 ```text
 GET    /api/admin/overview
 GET    /api/admin/users
+PATCH  /api/admin/users/:id/role
+DELETE /api/admin/users/:id
 GET    /api/admin/products
 POST   /api/admin/products
 PATCH  /api/admin/products/:id
@@ -205,6 +207,19 @@ server/uploads/products
 ```
 
 Folder ini masuk `.gitignore` karena berisi data runtime, bukan source code.
+
+## Admin User Management
+
+Halaman `/admin/users` mendukung:
+
+- Melihat semua user
+- Search berdasarkan nama, email, atau role
+- Filter `ALL`, `ADMIN`, dan `USER`
+- Promote user menjadi admin
+- Demote admin menjadi user
+- Delete user dengan confirm dialog
+
+Backend mencegah admin menghapus akunnya sendiri dan mencegah sistem kehilangan admin terakhir.
 
 ## Seed Data
 

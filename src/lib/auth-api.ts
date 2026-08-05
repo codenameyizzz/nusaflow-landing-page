@@ -99,6 +99,17 @@ export const adminApi = {
   users() {
     return request<PublicUser[]>("/admin/users");
   },
+  updateUserRole(id: string, role: PublicUser["role"]) {
+    return request<PublicUser>(`/admin/users/${id}/role`, {
+      method: "PATCH",
+      body: JSON.stringify({ role }),
+    });
+  },
+  removeUser(id: string) {
+    return request<{ success: boolean }>(`/admin/users/${id}`, {
+      method: "DELETE",
+    });
+  },
 };
 
 export type Product = {

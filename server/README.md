@@ -31,6 +31,8 @@ POST /api/auth/logout
 GET  /api/auth/me
 GET  /api/admin/overview
 GET  /api/admin/users
+PATCH /api/admin/users/:id/role
+DELETE /api/admin/users/:id
 GET  /api/admin/products
 POST /api/admin/products
 PATCH /api/admin/products/:id
@@ -60,6 +62,8 @@ UPDATE "User" SET "role" = 'ADMIN' WHERE "email" = 'email-kamu@example.com';
 ```
 
 Route `/api/admin/*` diproteksi dengan `JwtAuthGuard` dan `RolesGuard`.
+
+User management admin mencegah admin menghapus akunnya sendiri dan mencegah role admin terakhir diturunkan.
 
 ## Product CMS
 
