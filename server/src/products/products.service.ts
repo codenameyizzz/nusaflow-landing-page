@@ -19,6 +19,22 @@ export class ProductsService {
     });
   }
 
+  async findPublishedBySlug(slug: string) {
+    const product = await this.prisma.product.findFirst({
+      where: {
+        slug,
+        isPublished: true,
+      },
+      include: { images: { orderBy: { createdAt: "asc" } } },
+    });
+
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+
+    return product;
+  }
+
   findAllForAdmin() {
     return this.prisma.product.findMany({
       orderBy: { updatedAt: "desc" },

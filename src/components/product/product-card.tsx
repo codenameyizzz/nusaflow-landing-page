@@ -1,4 +1,5 @@
 import { ImageIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Product } from "@/lib/auth-api";
@@ -7,7 +8,8 @@ export function ProductCard({ product }: { product: Product }) {
   const image = product.images[0];
 
   return (
-    <Card className="h-full overflow-hidden p-0">
+    <Card className="h-full overflow-hidden p-0 transition-colors hover:bg-surface-alt">
+      <Link to={`/product/${product.slug}`} className="flex h-full flex-col outline-none">
       <div className="p-3 pb-0">
         <div className="aspect-[4/3] overflow-hidden rounded-[18px] bg-canvas">
           {image ? (
@@ -33,6 +35,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.description}
         </CardDescription>
       </CardHeader>
+      </Link>
     </Card>
   );
 }

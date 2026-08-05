@@ -106,6 +106,7 @@ DELETE /api/admin/products/:id
 POST   /api/admin/products/:id/images
 DELETE /api/admin/products/:productId/images/:imageId
 GET    /api/products
+GET    /api/products/:slug
 ```
 
 Endpoint admin diproteksi JWT cookie dan role `ADMIN`.
@@ -171,8 +172,11 @@ Produk dengan status `published` akan tampil otomatis sebagai card bergambar di 
 
 ```text
 /product
+/product/:slug
 /app
 ```
+
+Klik card produk untuk membuka detail page. Detail page berisi galeri gambar, ringkasan produk, CTA contact, dan detail fitur.
 
 Setelah update schema, jalankan migration:
 
@@ -257,6 +261,7 @@ Halaman:
 ```text
 /           Landing page
 /product    Product overview
+/product/:slug Product detail
 /pricing    Pricing page
 /customers  Customer/use case page
 /contact    Contact page

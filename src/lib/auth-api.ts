@@ -134,6 +134,9 @@ export const productsApi = {
   published() {
     return request<Product[]>("/products");
   },
+  detail(slug: string) {
+    return request<Product>(`/products/${slug}`);
+  },
 };
 
 export const adminProductsApi = {

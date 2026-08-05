@@ -13,6 +13,7 @@ import { ContactPage } from "@/pages/contact";
 import { CustomersPage } from "@/pages/customers";
 import { HomePage } from "@/pages/home";
 import { PricingPage } from "@/pages/pricing";
+import { ProductDetailPage } from "@/pages/product-detail";
 import { ProductPage } from "@/pages/product";
 
 export const router = createBrowserRouter([
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/product", element: <ProductPage /> },
+      { path: "/product/:slug", element: <ProductDetailPage /> },
       { path: "/pricing", element: <PricingPage /> },
       { path: "/customers", element: <CustomersPage /> },
       { path: "/contact", element: <ContactPage /> },

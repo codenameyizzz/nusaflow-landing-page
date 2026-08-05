@@ -37,6 +37,7 @@ DELETE /api/admin/products/:id
 POST /api/admin/products/:id/images
 DELETE /api/admin/products/:productId/images/:imageId
 GET  /api/products
+GET  /api/products/:slug
 GET  /api/health
 ```
 
@@ -61,7 +62,7 @@ Route `/api/admin/*` diproteksi dengan `JwtAuthGuard` dan `RolesGuard`.
 
 ## Product CMS
 
-Model `Product` dikelola admin dari `/api/admin/products`. Produk yang `isPublished = true` bisa dibaca frontend lewat `/api/products` dan ditampilkan di halaman `/product` serta `/app`.
+Model `Product` dikelola admin dari `/api/admin/products`. Produk yang `isPublished = true` bisa dibaca frontend lewat `/api/products` dan `/api/products/:slug`, lalu ditampilkan di halaman `/product`, `/product/:slug`, serta `/app`.
 
 Upload gambar memakai `multipart/form-data` field `images`. File development disimpan di:
 
