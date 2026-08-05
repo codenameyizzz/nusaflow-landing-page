@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { Activity, CheckCircle2, Clock3, Inbox, LayoutDashboard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/auth-context";
+import { productsApi, type Product } from "@/lib/auth-api";
 
 const userTasks = [
   { label: "Review customer inbox", value: "9 open", icon: Inbox },
@@ -12,6 +14,14 @@ const userTasks = [
 
 export function AppDashboardPage() {
   const { user } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    productsApi
+      .published()
+      .then(setProducts)
+      .catch(() => setProducts([]));
+  }, []);
 
   return (
     <section className="border-b border-hairline pt-16">
@@ -74,6 +84,39 @@ export function AppDashboardPage() {
             </div>
           ))}
         </Card>
+
+        <div className="mt-4">
+          <Card>
+            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-[12px] font-medium uppercase leading-[1.33] tracking-[0.6px] text-mid-gray">
+                  Products
+                </p>
+                <h2 className="mt-2 text-[24px] font-semibold leading-[1.33] tracking-[-0.6px]">
+                  Produk published dari CMS
+                </h2>
+              </div>
+              <Badge variant="outline">{products.length} visible</Badge>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              {products.slice(0, 4).map((product) => (
+                <div key={product.id} className="rounded-[18px] bg-canvas p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <Badge variant="secondary">{product.category}</Badge>
+                    <span className="text-sm font-medium text-ink">{product.priceLabel}</span>
+                  </div>
+                  <h3 className="mt-3 text-[18px] font-semibold leading-[1.56]">{product.title}</h3>
+                  <p className="mt-1 text-sm leading-[1.43] text-mid-gray">{product.description}</p>
+                </div>
+              ))}
+              {products.length === 0 ? (
+                <p className="rounded-[18px] bg-canvas px-3 py-2 text-sm text-mid-gray">
+                  Belum ada produk published dari admin CMS.
+                </p>
+              ) : null}
+            </div>
+          </Card>
+        </div>
       </div>
     </section>
   );

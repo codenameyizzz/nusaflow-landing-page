@@ -94,3 +94,52 @@ export const adminApi = {
     return request<AdminOverview>("/admin/overview");
   },
 };
+
+export type Product = {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  description: string;
+  priceLabel: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ProductInput = {
+  title: string;
+  category: string;
+  description: string;
+  priceLabel: string;
+  isPublished: boolean;
+};
+
+export const productsApi = {
+  published() {
+    return request<Product[]>("/products");
+  },
+};
+
+export const adminProductsApi = {
+  list() {
+    return request<Product[]>("/admin/products");
+  },
+  create(input: ProductInput) {
+    return request<Product>("/admin/products", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  update(id: string, input: Partial<ProductInput>) {
+    return request<Product>(`/admin/products/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    });
+  },
+  remove(id: string) {
+    return request<{ success: boolean }>(`/admin/products/${id}`, {
+      method: "DELETE",
+    });
+  },
+};

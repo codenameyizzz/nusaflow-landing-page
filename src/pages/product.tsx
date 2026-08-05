@@ -1,11 +1,25 @@
+import { useEffect, useState } from "react";
 import { features } from "@/data/site";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductMockup } from "@/components/marketing/product-mockup";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { StatBlock } from "@/components/marketing/stat-block";
 import { PageFrame } from "@/layouts/page-frame";
+import { Badge } from "@/components/ui/badge";
+import { productsApi, type Product } from "@/lib/auth-api";
 
 export function ProductPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    productsApi
+      .published()
+      .then(setProducts)
+      .catch(() => setProducts([]))
+      .finally(() => setIsLoadingProducts(false));
+  }, []);
+
   return (
     <PageFrame
       eyebrow="Product"
@@ -44,6 +58,48 @@ export function ProductPage() {
             <Card>
               <StatBlock label="Teams onboarded" value="420" progress={64} />
             </Card>
+          </div>
+        </div>
+      </section>
+      <section className="py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="CMS Products"
+            title="Published products from the admin CMS."
+            copy="Produk di section ini berasal dari database. Admin bisa membuat, mengubah, publish, atau menghapusnya dari CMS."
+          />
+          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <Card key={product.id}>
+                <CardHeader>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <Badge variant="secondary">{product.category}</Badge>
+                    <span className="text-sm font-medium text-ink">{product.priceLabel}</span>
+                  </div>
+                  <CardTitle>{product.title}</CardTitle>
+                  <CardDescription>{product.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+            {isLoadingProducts ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Loading products</CardTitle>
+                  <CardDescription>Membaca data produk dari backend.</CardDescription>
+                </CardHeader>
+              </Card>
+            ) : null}
+            {!isLoadingProducts && products.length === 0 ? (
+              <Card>
+                <CardHeader>
+                  <Badge variant="outline">Empty state</Badge>
+                  <CardTitle>Belum ada produk published</CardTitle>
+                  <CardDescription>
+                    Login sebagai admin, buka `/admin`, lalu buat produk dan aktifkan status published.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : null}
           </div>
         </div>
       </section>

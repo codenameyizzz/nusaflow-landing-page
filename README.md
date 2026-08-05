@@ -97,7 +97,12 @@ Auth menggunakan JWT di httpOnly cookie, bukan localStorage.
 Endpoint admin:
 
 ```text
-GET /api/admin/overview
+GET    /api/admin/overview
+GET    /api/admin/products
+POST   /api/admin/products
+PATCH  /api/admin/products/:id
+DELETE /api/admin/products/:id
+GET    /api/products
 ```
 
 Endpoint admin diproteksi JWT cookie dan role `ADMIN`.
@@ -130,6 +135,42 @@ SELECT id, email, name, role FROM "User";
 ```
 
 Setelah login ulang, akun `ADMIN` akan diarahkan ke `/admin`, sedangkan akun `USER` diarahkan ke `/app`.
+
+## CMS Produk
+
+Admin bisa mengelola produk dari halaman:
+
+```text
+/admin
+```
+
+Fitur yang tersedia:
+
+- Create produk
+- Edit produk
+- Publish/unpublish produk
+- Delete produk
+- Melihat daftar produk CMS
+
+Produk dengan status `published` akan tampil otomatis di halaman:
+
+```text
+/product
+```
+
+Setelah update schema, jalankan migration:
+
+```bash
+cd server
+npm run prisma:migrate
+```
+
+Jika Prisma Client terkunci karena backend dev server sedang berjalan, hentikan backend dengan `Ctrl+C`, lalu jalankan:
+
+```bash
+npm run prisma:generate
+npm run dev
+```
 
 ## ShadCN Di Project Ini
 
@@ -260,6 +301,7 @@ server/
     config/
     health/
     prisma/
+    products/
     users/
 ```
 
@@ -272,6 +314,7 @@ Prinsip yang dipakai:
 - `src/data/site.ts`: konten/data statis agar tidak tersebar di banyak komponen.
 - `src/routes.tsx`: konfigurasi routing terpusat.
 - `server/src/auth`: register, login, logout, me, JWT cookie guard.
+- `server/src/products`: CRUD produk untuk CMS admin dan endpoint published untuk frontend.
 - `server/src/users`: akses data user dan presenter agar password hash tidak pernah keluar.
 - `server/src/prisma`: Prisma client lifecycle untuk NestJS.
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Activity, ShieldCheck, UserCog, Users } from "lucide-react";
+import { ProductCms } from "@/components/admin/product-cms";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -62,6 +63,10 @@ export function AdminDashboardPage() {
               <Progress value={progress} />
             </Card>
           ))}
+        </div>
+
+        <div className="mt-4">
+          <ProductCms />
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">

@@ -29,6 +29,11 @@ POST /api/auth/login
 POST /api/auth/logout
 GET  /api/auth/me
 GET  /api/admin/overview
+GET  /api/admin/products
+POST /api/admin/products
+PATCH /api/admin/products/:id
+DELETE /api/admin/products/:id
+GET  /api/products
 GET  /api/health
 ```
 
@@ -51,6 +56,17 @@ UPDATE "User" SET "role" = 'ADMIN' WHERE "email" = 'email-kamu@example.com';
 
 Route `/api/admin/*` diproteksi dengan `JwtAuthGuard` dan `RolesGuard`.
 
+## Product CMS
+
+Model `Product` dikelola admin dari `/api/admin/products`. Produk yang `isPublished = true` bisa dibaca frontend lewat `/api/products` dan ditampilkan di halaman `/product`.
+
+Setelah schema berubah, jalankan:
+
+```bash
+npm run prisma:migrate
+npm run prisma:generate
+```
+
 ## Struktur
 
 ```text
@@ -65,6 +81,7 @@ src/
   common/
     filters/
   config/
+  products/
   prisma/
   users/
 ```
