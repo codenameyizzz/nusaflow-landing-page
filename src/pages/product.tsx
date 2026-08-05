@@ -32,7 +32,7 @@ export function ProductPage() {
           <div className="grid gap-4">
             {features.slice(0, 4).map((feature) => (
               <Card key={feature.title}>
-                <CardHeader>
+                <CardHeader className="p-5">
                   <feature.icon className="size-5 text-ink" />
                   <CardTitle>{feature.title}</CardTitle>
                   <CardDescription>{feature.copy}</CardDescription>
@@ -70,7 +70,20 @@ export function ProductPage() {
           />
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <Card key={product.id}>
+              <Card key={product.id} className="overflow-hidden p-0">
+                <div className="aspect-[4/3] bg-canvas">
+                  {product.images[0] ? (
+                    <img
+                      src={product.images[0].url}
+                      alt={product.title}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex size-full items-center justify-center text-sm text-mid-gray">
+                      No image
+                    </div>
+                  )}
+                </div>
                 <CardHeader>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <Badge variant="secondary">{product.category}</Badge>

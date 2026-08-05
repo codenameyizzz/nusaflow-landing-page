@@ -2,9 +2,11 @@ import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
+import express from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
+import { uploadRoot } from "./products/product-upload";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +16,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.use(helmet());
   app.use(cookieParser());
+  app.use("/uploads", express.static(uploadRoot));
   app.enableCors({
     origin: clientOrigin,
     credentials: true,

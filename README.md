@@ -102,6 +102,8 @@ GET    /api/admin/products
 POST   /api/admin/products
 PATCH  /api/admin/products/:id
 DELETE /api/admin/products/:id
+POST   /api/admin/products/:id/images
+DELETE /api/admin/products/:productId/images/:imageId
 GET    /api/products
 ```
 
@@ -148,14 +150,17 @@ Fitur yang tersedia:
 
 - Create produk
 - Edit produk
+- Upload gambar produk saat create/edit
+- Hapus gambar produk
 - Publish/unpublish produk
 - Delete produk
 - Melihat daftar produk CMS
 
-Produk dengan status `published` akan tampil otomatis di halaman:
+Produk dengan status `published` akan tampil otomatis sebagai card bergambar di halaman:
 
 ```text
 /product
+/app
 ```
 
 Setelah update schema, jalankan migration:
@@ -171,6 +176,14 @@ Jika Prisma Client terkunci karena backend dev server sedang berjalan, hentikan 
 npm run prisma:generate
 npm run dev
 ```
+
+File upload development disimpan di:
+
+```text
+server/uploads/products
+```
+
+Folder ini masuk `.gitignore` karena berisi data runtime, bukan source code.
 
 ## ShadCN Di Project Ini
 

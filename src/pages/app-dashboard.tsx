@@ -100,13 +100,28 @@ export function AppDashboardPage() {
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {products.slice(0, 4).map((product) => (
-                <div key={product.id} className="rounded-[18px] bg-canvas p-4">
+                <div key={product.id} className="overflow-hidden rounded-[18px] bg-canvas">
+                  <div className="aspect-[4/3] bg-hairline/40">
+                    {product.images[0] ? (
+                      <img
+                        src={product.images[0].url}
+                        alt={product.title}
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center text-sm text-mid-gray">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <Badge variant="secondary">{product.category}</Badge>
                     <span className="text-sm font-medium text-ink">{product.priceLabel}</span>
                   </div>
                   <h3 className="mt-3 text-[18px] font-semibold leading-[1.56]">{product.title}</h3>
                   <p className="mt-1 text-sm leading-[1.43] text-mid-gray">{product.description}</p>
+                  </div>
                 </div>
               ))}
               {products.length === 0 ? (

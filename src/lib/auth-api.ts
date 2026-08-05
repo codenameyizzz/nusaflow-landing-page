@@ -27,13 +27,16 @@ type LoginInput = {
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const isFormData = init?.body instanceof FormData;
   const response = await fetch(`/api${path}`, {
     ...init,
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
+    headers: isFormData
+      ? init?.headers
+      : {
+          "Content-Type": "application/json",
+          ...init?.headers,
+        },
   });
 
   if (!response.ok) {
@@ -105,6 +108,15 @@ export type Product = {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+  images: ProductImage[];
+};
+
+export type ProductImage = {
+  id: string;
+  url: string;
+  filename: string;
+  productId: string;
+  createdAt: string;
 };
 
 export type ProductInput = {
@@ -125,10 +137,10 @@ export const adminProductsApi = {
   list() {
     return request<Product[]>("/admin/products");
   },
-  create(input: ProductInput) {
+  create(input: ProductInput, images: File[] = []) {
     return request<Product>("/admin/products", {
       method: "POST",
-      body: JSON.stringify(input),
+      body: toProductFormData(input, images),
     });
   },
   update(id: string, input: Partial<ProductInput>) {
@@ -142,4 +154,29 @@ export const adminProductsApi = {
       method: "DELETE",
     });
   },
+  addImages(id: string, images: File[]) {
+    const formData = new FormData();
+    images.forEach((image) => formData.append("images", image));
+
+    return request<Product>(`/admin/products/${id}/images`, {
+      method: "POST",
+      body: formData,
+    });
+  },
+  removeImage(productId: string, imageId: string) {
+    return request<{ success: boolean }>(`/admin/products/${productId}/images/${imageId}`, {
+      method: "DELETE",
+    });
+  },
 };
+
+function toProductFormData(input: ProductInput, images: File[]) {
+  const formData = new FormData();
+  formData.append("title", input.title);
+  formData.append("category", input.category);
+  formData.append("description", input.description);
+  formData.append("priceLabel", input.priceLabel);
+  formData.append("isPublished", String(input.isPublished));
+  images.forEach((image) => formData.append("images", image));
+  return formData;
+}

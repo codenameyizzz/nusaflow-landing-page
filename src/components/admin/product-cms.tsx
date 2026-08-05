@@ -1,5 +1,5 @@
 import { type FormEvent, useEffect, useMemo, useState } from "react";
-import { Edit3, PackagePlus, Trash2 } from "lucide-react";
+import { Edit3, ImagePlus, PackagePlus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,6 +27,7 @@ const emptyForm: ProductInput = {
 export function ProductCms() {
   const [products, setProducts] = useState<Product[]>([]);
   const [form, setForm] = useState<ProductInput>(emptyForm);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +59,7 @@ export function ProductCms() {
   function openCreateDialog() {
     setEditingProduct(null);
     setForm(emptyForm);
+    setImageFiles([]);
     setIsDialogOpen(true);
   }
 
@@ -70,6 +72,7 @@ export function ProductCms() {
       priceLabel: product.priceLabel,
       isPublished: product.isPublished,
     });
+    setImageFiles([]);
     setIsDialogOpen(true);
   }
 
@@ -81,8 +84,11 @@ export function ProductCms() {
     try {
       if (editingProduct) {
         await adminProductsApi.update(editingProduct.id, form);
+        if (imageFiles.length) {
+          await adminProductsApi.addImages(editingProduct.id, imageFiles);
+        }
       } else {
-        await adminProductsApi.create(form);
+        await adminProductsApi.create(form, imageFiles);
       }
 
       setIsDialogOpen(false);
@@ -91,6 +97,22 @@ export function ProductCms() {
       setErrorMessage(error instanceof Error ? error.message : "Gagal menyimpan produk.");
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function removeImage(product: Product, imageId: string) {
+    setErrorMessage("");
+
+    try {
+      await adminProductsApi.removeImage(product.id, imageId);
+      setEditingProduct((current) =>
+        current?.id === product.id
+          ? { ...current, images: current.images.filter((image) => image.id !== imageId) }
+          : current,
+      );
+      await loadProducts();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Gagal menghapus gambar.");
     }
   }
 
@@ -154,8 +176,21 @@ export function ProductCms() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="grid gap-3 border-b border-hairline bg-paper px-4 py-4 text-sm last:border-b-0 lg:grid-cols-[1fr_0.7fr_auto]"
+            className="grid gap-3 border-b border-hairline bg-paper px-4 py-4 text-sm last:border-b-0 lg:grid-cols-[80px_1fr_0.7fr_auto]"
           >
+            <div className="aspect-[4/3] overflow-hidden rounded-[18px] bg-canvas">
+              {product.images[0] ? (
+                <img
+                  src={product.images[0].url}
+                  alt={product.title}
+                  className="size-full object-cover"
+                />
+              ) : (
+                <span className="flex size-full items-center justify-center text-mid-gray">
+                  <ImagePlus className="size-5" />
+                </span>
+              )}
+            </div>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="font-medium text-ink">{product.title}</p>
@@ -167,6 +202,7 @@ export function ProductCms() {
             </div>
             <div className="flex flex-wrap items-center gap-2 text-mid-gray lg:justify-end">
               <Badge variant="outline">{product.category}</Badge>
+              <Badge variant="outline">{product.images.length} images</Badge>
               <span>{product.priceLabel}</span>
             </div>
             <div className="flex flex-wrap gap-2 lg:justify-end">
@@ -248,6 +284,53 @@ export function ProductCms() {
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="product-images">Images</Label>
+                <Input
+                  id="product-images"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  multiple
+                  onChange={(event) => setImageFiles(Array.from(event.target.files ?? []))}
+                />
+                <p className="text-xs text-mid-gray">
+                  Maksimal 6 file per upload. Format: jpg, png, webp, atau gif.
+                </p>
+                {imageFiles.length ? (
+                  <div className="flex flex-wrap gap-2">
+                    {imageFiles.map((file) => (
+                      <Badge key={`${file.name}-${file.size}`} variant="secondary">
+                        {file.name}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              {editingProduct?.images.length ? (
+                <div className="space-y-2">
+                  <Label>Existing images</Label>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {editingProduct.images.map((image) => (
+                      <div key={image.id} className="overflow-hidden rounded-[18px] border border-hairline bg-canvas">
+                        <img
+                          src={image.url}
+                          alt={editingProduct.title}
+                          className="aspect-[4/3] w-full object-cover"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          className="m-2 w-[calc(100%-1rem)]"
+                          onClick={() => removeImage(editingProduct, image.id)}
+                        >
+                          <Trash2 />
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               <Label className="flex items-center justify-between gap-4 rounded-[18px] bg-canvas px-3 py-2">
                 <span>
                   <span className="block text-sm text-ink">Published</span>

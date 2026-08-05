@@ -33,6 +33,8 @@ GET  /api/admin/products
 POST /api/admin/products
 PATCH /api/admin/products/:id
 DELETE /api/admin/products/:id
+POST /api/admin/products/:id/images
+DELETE /api/admin/products/:productId/images/:imageId
 GET  /api/products
 GET  /api/health
 ```
@@ -58,7 +60,15 @@ Route `/api/admin/*` diproteksi dengan `JwtAuthGuard` dan `RolesGuard`.
 
 ## Product CMS
 
-Model `Product` dikelola admin dari `/api/admin/products`. Produk yang `isPublished = true` bisa dibaca frontend lewat `/api/products` dan ditampilkan di halaman `/product`.
+Model `Product` dikelola admin dari `/api/admin/products`. Produk yang `isPublished = true` bisa dibaca frontend lewat `/api/products` dan ditampilkan di halaman `/product` serta `/app`.
+
+Upload gambar memakai `multipart/form-data` field `images`. File development disimpan di:
+
+```text
+server/uploads/products
+```
+
+Folder upload di-ignore dari Git karena berisi data runtime.
 
 Setelah schema berubah, jalankan:
 

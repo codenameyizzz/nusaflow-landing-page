@@ -36,6 +36,7 @@
     "@nestjs/testing": "latest",
     "@types/cookie-parser": "latest",
     "@types/express": "latest",
+    "@types/multer": "^2.2.0",
     "@types/node": "latest",
     "@types/passport-jwt": "latest",
     "prisma": "6.19.3",
