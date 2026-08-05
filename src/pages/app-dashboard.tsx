@@ -3,6 +3,7 @@ import { Activity, CheckCircle2, Clock3, Inbox, LayoutDashboard } from "lucide-r
 import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { ProductCard } from "@/components/product/product-card";
 import { useAuth } from "@/contexts/auth-context";
 import { productsApi, type Product } from "@/lib/auth-api";
 
@@ -100,29 +101,7 @@ export function AppDashboardPage() {
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {products.slice(0, 4).map((product) => (
-                <div key={product.id} className="overflow-hidden rounded-[18px] bg-canvas">
-                  <div className="aspect-[4/3] bg-hairline/40">
-                    {product.images[0] ? (
-                      <img
-                        src={product.images[0].url}
-                        alt={product.title}
-                        className="size-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex size-full items-center justify-center text-sm text-mid-gray">
-                        No image
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Badge variant="secondary">{product.category}</Badge>
-                    <span className="text-sm font-medium text-ink">{product.priceLabel}</span>
-                  </div>
-                  <h3 className="mt-3 text-[18px] font-semibold leading-[1.56]">{product.title}</h3>
-                  <p className="mt-1 text-sm leading-[1.43] text-mid-gray">{product.description}</p>
-                  </div>
-                </div>
+                <ProductCard key={product.id} product={product} />
               ))}
               {products.length === 0 ? (
                 <p className="rounded-[18px] bg-canvas px-3 py-2 text-sm text-mid-gray">

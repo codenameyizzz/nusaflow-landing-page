@@ -4,6 +4,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { ProductMockup } from "@/components/marketing/product-mockup";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { StatBlock } from "@/components/marketing/stat-block";
+import { ProductCard } from "@/components/product/product-card";
 import { PageFrame } from "@/layouts/page-frame";
 import { Badge } from "@/components/ui/badge";
 import { productsApi, type Product } from "@/lib/auth-api";
@@ -70,29 +71,7 @@ export function ProductPage() {
           />
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <Card key={product.id} className="overflow-hidden p-0">
-                <div className="aspect-[4/3] bg-canvas">
-                  {product.images[0] ? (
-                    <img
-                      src={product.images[0].url}
-                      alt={product.title}
-                      className="size-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex size-full items-center justify-center text-sm text-mid-gray">
-                      No image
-                    </div>
-                  )}
-                </div>
-                <CardHeader>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Badge variant="secondary">{product.category}</Badge>
-                    <span className="text-sm font-medium text-ink">{product.priceLabel}</span>
-                  </div>
-                  <CardTitle>{product.title}</CardTitle>
-                  <CardDescription>{product.description}</CardDescription>
-                </CardHeader>
-              </Card>
+              <ProductCard key={product.id} product={product} />
             ))}
             {isLoadingProducts ? (
               <Card>

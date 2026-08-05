@@ -176,9 +176,9 @@ export function ProductCms() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="grid gap-3 border-b border-hairline bg-paper px-4 py-4 text-sm last:border-b-0 lg:grid-cols-[80px_1fr_0.7fr_auto]"
+            className="grid gap-4 border-b border-hairline bg-paper px-4 py-4 text-sm last:border-b-0 lg:grid-cols-[96px_minmax(0,1fr)_minmax(160px,0.45fr)_auto] lg:items-center"
           >
-            <div className="aspect-[4/3] overflow-hidden rounded-[18px] bg-canvas">
+            <div className="h-20 w-24 overflow-hidden rounded-[18px] bg-canvas">
               {product.images[0] ? (
                 <img
                   src={product.images[0].url}
@@ -192,20 +192,22 @@ export function ProductCms() {
               )}
             </div>
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <p className="font-medium text-ink">{product.title}</p>
+              <div className="flex min-w-0 flex-wrap items-center gap-2">
+                <p className="min-w-0 truncate font-medium text-ink">{product.title}</p>
                 <Badge variant={product.isPublished ? "default" : "secondary"}>
                   {product.isPublished ? "Published" : "Draft"}
                 </Badge>
               </div>
               <p className="mt-1 line-clamp-2 text-mid-gray">{product.description}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 text-mid-gray lg:justify-end">
-              <Badge variant="outline">{product.category}</Badge>
+            <div className="flex min-w-0 flex-wrap items-center gap-2 text-mid-gray lg:justify-end">
+              <Badge variant="outline" className="max-w-full truncate">
+                {product.category}
+              </Badge>
               <Badge variant="outline">{product.images.length} images</Badge>
-              <span>{product.priceLabel}</span>
+              <span className="shrink-0 text-sm font-medium text-ink">{product.priceLabel}</span>
             </div>
-            <div className="flex flex-wrap gap-2 lg:justify-end">
+            <div className="flex flex-wrap gap-2 lg:w-[272px] lg:justify-end">
               <Button variant="secondary" onClick={() => togglePublish(product)}>
                 {product.isPublished ? "Unpublish" : "Publish"}
               </Button>
