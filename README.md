@@ -28,6 +28,72 @@ Preview hasil build:
 npm run preview
 ```
 
+## Menjalankan Backend Auth
+
+Backend ada di folder `server/` dan memakai NestJS + Prisma + PostgreSQL.
+
+Install dependency backend:
+
+```bash
+cd server
+npm install
+```
+
+Buat environment file:
+
+```bash
+copy .env.example .env
+```
+
+Isi minimal:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/nusaflow?schema=public"
+JWT_SECRET="replace-with-a-long-random-secret"
+CLIENT_ORIGIN="http://127.0.0.1:5173"
+```
+
+Generate Prisma client:
+
+```bash
+npm run prisma:generate
+```
+
+Jalankan migration:
+
+```bash
+npm run prisma:migrate
+```
+
+Jalankan backend:
+
+```bash
+npm run dev
+```
+
+Saat frontend dijalankan dengan `npm run dev`, Vite mem-proxy request `/api` ke `http://127.0.0.1:4000`. Login dan register page sudah memakai endpoint backend ini melalui `src/lib/auth-api.ts`.
+
+Dari root project, script shortcut juga tersedia:
+
+```bash
+npm run server:dev
+npm run server:build
+npm run server:prisma:generate
+npm run server:prisma:migrate
+```
+
+Endpoint auth:
+
+```text
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+GET  /api/auth/me
+GET  /api/health
+```
+
+Auth menggunakan JWT di httpOnly cookie, bukan localStorage.
+
 ## ShadCN Di Project Ini
 
 shadcn/ui sudah dipasang lewat CLI lokal:
@@ -137,6 +203,27 @@ src/
     utils.ts
 ```
 
+Backend:
+
+```text
+server/
+  prisma/
+    schema.prisma
+  src/
+    auth/
+      decorators/
+      dto/
+      guards/
+      strategies/
+      types/
+    common/
+      filters/
+    config/
+    health/
+    prisma/
+    users/
+```
+
 Prinsip yang dipakai:
 
 - `src/components/ui`: hanya komponen shadcn dasar.
@@ -145,6 +232,9 @@ Prinsip yang dipakai:
 - `src/layouts`: shell/layout yang dipakai banyak halaman.
 - `src/data/site.ts`: konten/data statis agar tidak tersebar di banyak komponen.
 - `src/routes.tsx`: konfigurasi routing terpusat.
+- `server/src/auth`: register, login, logout, me, JWT cookie guard.
+- `server/src/users`: akses data user dan presenter agar password hash tidak pernah keluar.
+- `server/src/prisma`: Prisma client lifecycle untuk NestJS.
 
 ## Audit Dependency
 
@@ -274,30 +364,54 @@ public/nusaflow-logo.png
 
 File asli upload `NusaFlow-Logo.png` di-root project di-ignore agar tidak ikut push sebagai duplikat.
 
-## Local Ignore
+## Git Ignore
 
-File `.gitignore` dipakai lokal saja dan tidak perlu ikut di-push. Agar Git lokal juga mengabaikan `.gitignore`, project ini memakai `.git/info/exclude`.
+File `.gitignore` ikut di-push agar aturan ignore konsisten di semua environment.
 
-Isi ignore lokal yang disarankan:
+Isi ignore yang dipakai:
 
 ```text
-node_modules
-dist
+node_modules/
+server/node_modules/
+dist/
+server/dist/
+build/
+coverage/
 .env
-.env.local
+.env.*
+!.env.example
+server/.env
+server/.env.*
+!server/.env.example
 *.local
-NusaFlow-Logo.png
-public/nusaflow-hero.png
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*.log
+.vite/
+.cache/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+/NusaFlow-Logo.png
+public/nusaflow-hero.png
 ```
 
 Yang sebaiknya di-push:
 
 - `src/`
 - `public/nusaflow-logo.png`
+- `server/src/`
+- `server/prisma/schema.prisma`
+- `server/prisma/migrations/`
+- `server/package.json`
+- `server/package-lock.json`
+- `server/.env.example`
 - `components.json`
 - `package.json`
 - `package-lock.json`

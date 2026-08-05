@@ -4,6 +4,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "server:dev": "npm --prefix server run dev",
+    "server:build": "npm --prefix server run build",
+    "server:prisma:generate": "npm --prefix server run prisma:generate",
+    "server:prisma:migrate": "npm --prefix server run prisma:migrate",
     "ui": "shadcn",
     "ui:add": "shadcn add"
   },
