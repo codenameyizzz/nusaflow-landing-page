@@ -45,7 +45,7 @@ export function AdminLayout() {
   return (
     <main className="min-h-screen bg-canvas text-ink">
       <div className="grid min-h-screen lg:grid-cols-[280px_1fr]">
-        <aside className="hidden border-r border-hairline bg-surface-alt lg:flex lg:flex-col">
+        <aside className="sticky top-0 hidden h-screen border-r border-hairline bg-surface-alt lg:flex lg:flex-col">
           <AdminSidebar onLogout={handleLogout} />
         </aside>
         <section className="min-w-0">
@@ -64,7 +64,7 @@ export function AdminLayout() {
                       <Logo />
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="mt-8">
+                  <div className="mt-8 h-[calc(100vh-8rem)]">
                     <AdminSidebar onLogout={handleLogout} mobile />
                   </div>
                 </SheetContent>
@@ -101,16 +101,18 @@ export function AdminLayout() {
 
 function AdminSidebar({ onLogout, mobile = false }: { onLogout: () => void; mobile?: boolean }) {
   return (
-    <div className="flex h-full flex-col p-5">
-      <div className={mobile ? "hidden" : ""}>
+    <div className="flex h-full min-h-0 flex-col p-5">
+      <div className={mobile ? "hidden" : "shrink-0"}>
         <Logo />
       </div>
-      <nav className="mt-8 grid gap-1" aria-label="Admin navigation">
-        {adminNavItems.map(({ label, href, icon: Icon }) => (
-          <AdminNavLink key={href} href={href} label={label} icon={Icon} mobile={mobile} />
-        ))}
-      </nav>
-      <div className="mt-auto grid gap-3">
+      <div className="mt-8 min-h-0 flex-1 overflow-y-auto pr-1">
+        <nav className="grid gap-1" aria-label="Admin navigation">
+          {adminNavItems.map(({ label, href, icon: Icon }) => (
+            <AdminNavLink key={href} href={href} label={label} icon={Icon} mobile={mobile} />
+          ))}
+        </nav>
+      </div>
+      <div className="grid shrink-0 gap-3 pt-5">
         <Separator />
         <Button asChild variant="secondary">
           <Link to="/">
