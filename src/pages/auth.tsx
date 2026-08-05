@@ -110,7 +110,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                       : "Continue to your monochrome operations dashboard."}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 pb-2">
                   {isRegister ? (
                     <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
@@ -184,7 +184,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                     {isSubmitting ? "Processing..." : isRegister ? "Create workspace" : "Login"}
                     <ArrowRight />
                   </Button>
-                  <div className="relative py-1">
+                  <div className="relative py-3">
                     <Separator />
                     <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-paper px-3 text-xs text-mid-gray">
                       or
@@ -194,11 +194,13 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
                     Continue with Google
                   </Button>
                 </CardContent>
-                <CardFooter className="justify-center text-sm text-mid-gray">
-                  {isRegister ? "Already have an account?" : "No account yet?"}
-                  <Link to={isRegister ? "/login" : "/register"} className="ml-1 font-medium text-ink hover:underline">
-                    {isRegister ? "Login" : "Register"}
-                  </Link>
+                <CardFooter className="mt-3 border-t border-hairline pt-5 text-sm text-mid-gray">
+                  <p className="flex w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center">
+                    <span>{isRegister ? "Already have an account?" : "No account yet?"}</span>
+                    <Link to={isRegister ? "/login" : "/register"} className="font-medium text-ink hover:underline">
+                      {isRegister ? "Login" : "Register"}
+                    </Link>
+                  </p>
                 </CardFooter>
               </form>
             </Card>
