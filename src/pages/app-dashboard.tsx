@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
-import { Activity, CheckCircle2, Clock3, Inbox, LayoutDashboard } from "lucide-react";
+import { Activity, LayoutDashboard } from "lucide-react";
+import { activityTimeline, operationalModules } from "@/data/site";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ProductCard } from "@/components/product/product-card";
 import { useAuth } from "@/contexts/auth-context";
 import { productsApi, type Product } from "@/lib/auth-api";
-
-const userTasks = [
-  { label: "Review customer inbox", value: "9 open", icon: Inbox },
-  { label: "Approve pending workflow", value: "3 items", icon: CheckCircle2 },
-  { label: "Sync daily report", value: "14:00", icon: Clock3 },
-];
 
 export function AppDashboardPage() {
   const { user } = useAuth();
@@ -34,7 +29,7 @@ export function AppDashboardPage() {
               Selamat datang, {user?.name}.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-[1.5] text-mid-gray">
-              Ini adalah area user untuk membaca pekerjaan operasional tanpa akses CMS admin.
+              Ini adalah area user untuk membaca queue invoice, order, customer, dan catalog yang dipublish admin.
             </p>
           </div>
           <Card className="w-full md:max-w-xs">
@@ -49,17 +44,17 @@ export function AppDashboardPage() {
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {userTasks.map(({ label, value, icon: Icon }, index) => (
-            <Card key={label}>
+          {operationalModules.slice(0, 3).map(({ title, metric, icon: Icon, copy }, index) => (
+            <Card key={title}>
               <CardHeader>
                 <div className="flex items-center justify-between gap-4">
                   <span className="flex size-9 items-center justify-center rounded-[18px] bg-canvas text-ink">
                     <Icon className="size-4" />
                   </span>
-                  <Badge variant="secondary">{value}</Badge>
+                  <Badge variant="secondary">{metric}</Badge>
                 </div>
-                <CardTitle>{label}</CardTitle>
-                <CardDescription>Prioritas kerja harian untuk user biasa.</CardDescription>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{copy}</CardDescription>
               </CardHeader>
               <Progress value={[68, 42, 81][index]} />
             </Card>
@@ -78,10 +73,16 @@ export function AppDashboardPage() {
             </div>
             <Badge variant="outline">User scope</Badge>
           </div>
-          {["Invoice reminder queued", "Customer follow-up completed", "Inventory alert reviewed"].map((item) => (
-            <div key={item} className="flex items-center gap-3 rounded-[18px] bg-canvas px-3 py-2 text-sm">
+          {activityTimeline.map((item) => (
+            <div key={item.title} className="grid gap-3 rounded-[18px] bg-canvas px-3 py-3 text-sm sm:grid-cols-[64px_1fr]">
+              <Badge variant="outline" className="justify-center">{item.time}</Badge>
+              <div className="flex min-w-0 items-start gap-3">
               <Activity className="size-4 text-mid-gray" />
-              <span>{item}</span>
+                <div className="min-w-0">
+                  <p className="font-medium text-ink">{item.title}</p>
+                  <p className="mt-1 text-mid-gray">{item.copy}</p>
+                </div>
+              </div>
             </div>
           ))}
         </Card>

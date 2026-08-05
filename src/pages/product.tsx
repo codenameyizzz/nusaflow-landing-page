@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { features } from "@/data/site";
+import { features, operationalModules, workflowTemplates } from "@/data/site";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductMockup } from "@/components/marketing/product-mockup";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { StatBlock } from "@/components/marketing/stat-block";
 import { ProductCard } from "@/components/product/product-card";
 import { PageFrame } from "@/layouts/page-frame";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +23,8 @@ export function ProductPage() {
   return (
     <PageFrame
       eyebrow="Product"
-      title="A compact operating system for daily business work."
-      copy="NusaFlow turns invoices, orders, customer messages, and approval decisions into one predictable workspace."
+      title="A workflow OS for invoices, orders, customers, and service catalog."
+      copy="NusaFlow gives operational teams a structured place to run daily work, while admins manage products and services from CMS."
     >
       <section className="py-20">
         <div className="mx-auto grid max-w-[1280px] gap-4 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
@@ -45,20 +44,44 @@ export function ProductPage() {
       </section>
       <section className="border-y border-hairline bg-surface-alt py-20">
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            eyebrow="Modules"
-            title="Everything is organized as reusable operational modules."
+            <SectionHeading
+            eyebrow="Core modules"
+            title="Each module owns a real business queue."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-3">
-            <Card>
-              <StatBlock label="Automation" value="12K" progress={84} />
-            </Card>
-            <Card>
-              <StatBlock label="Invoices tracked" value="8.4K" progress={78} />
-            </Card>
-            <Card>
-              <StatBlock label="Teams onboarded" value="420" progress={64} />
-            </Card>
+            {operationalModules.slice(0, 3).map((module) => (
+              <Card key={module.title}>
+                <CardHeader>
+                  <module.icon className="size-5 text-ink" />
+                  <Badge variant="secondary" className="w-fit">{module.metric}</Badge>
+                  <CardTitle>{module.title}</CardTitle>
+                  <CardDescription>{module.copy}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Workflow templates"
+            title="Templates convert recurring work into clear operational flows."
+            copy="Finance, fulfillment, and support can start from predefined routines instead of building from scratch."
+          />
+          <div className="mt-12 grid gap-4 lg:grid-cols-3">
+            {workflowTemplates.map((template) => (
+              <Card key={template.title}>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-3">
+                    <template.icon className="size-5 text-ink" />
+                    <Badge variant="outline">{template.meta}</Badge>
+                  </div>
+                  <CardTitle>{template.title}</CardTitle>
+                  <CardDescription>{template.copy}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -66,8 +89,8 @@ export function ProductPage() {
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="CMS Products"
-            title="Published products from the admin CMS."
-            copy="Produk di section ini berasal dari database. Admin bisa membuat, mengubah, publish, atau menghapusnya dari CMS."
+            title="Product and service catalog from the admin CMS."
+            copy="Setiap card di bawah berasal dari database. Admin bisa membuat produk, upload gambar, publish, dan mengarahkan user ke detail page."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (

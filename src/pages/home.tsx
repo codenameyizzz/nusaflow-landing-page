@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
-import { Check, ClipboardCheck } from "lucide-react";
+import { Check, ClipboardCheck, Database, TimerReset } from "lucide-react";
 import {
+  activityTimeline,
   dashboardMetrics,
   faqs,
   features,
+  operationalModules,
+  operationalRecords,
   pains,
   plans,
   testimonials,
+  workflowTemplates,
   workflowSteps,
 } from "@/data/site";
 import {
@@ -52,16 +56,16 @@ export function HomePage() {
           <div>
             <Badge className="mb-5">clinical blueprint</Badge>
             <h1 className="max-w-2xl text-[36px] font-semibold leading-[1.11] tracking-[-0.9px] sm:text-[48px] sm:leading-[1.1] sm:tracking-[-2.4px]">
-              Operations infrastructure on frosted paper.
+              Workflow control for invoices, orders, and customer operations.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-[1.5] text-mid-gray">
-              NusaFlow adalah contoh landing page shadcn/ui dengan sistem monochrome, radius besar,
-              hairline borders, dan product mockup yang dibangun dari komponen.
+              NusaFlow membantu tim operasional membaca prioritas harian: invoice yang harus ditagih,
+              order yang harus dikirim, customer yang perlu follow-up, dan katalog service yang dikelola dari CMS.
             </p>
             <div className="mt-8 flex flex-col gap-2 sm:flex-row">
               <DemoDialog />
               <Button asChild variant="secondary">
-                <a href="#komponen">Inspect components</a>
+                <a href="#templates">View templates</a>
               </Button>
             </div>
             <div className="mt-8 grid max-w-xl gap-3 sm:grid-cols-3">
@@ -78,8 +82,8 @@ export function HomePage() {
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Problem"
-            title="Manual work creates noise. The UI should not."
-            copy="Card surfaces, compact type, and functional icons make the value proposition visible without decorative color."
+            title="Work breaks when invoices, orders, and customers live in different tools."
+            copy="NusaFlow turns scattered spreadsheets, chat notes, and approval decisions into operational queues that can be assigned and reviewed."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {pains.map((item) => (
@@ -95,13 +99,56 @@ export function HomePage() {
         </div>
       </section>
 
-      <section id="komponen" className="border-y border-hairline bg-surface-alt py-20">
+      <section id="templates" className="border-y border-hairline bg-surface-alt py-20">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <SectionHeading
+              eyebrow="Workflow templates"
+              title="Start from operational playbooks, not blank automation."
+              copy="Templates map real back-office routines into clear steps with owner, condition, and escalation logic."
+            />
+            <Button asChild variant="outline">
+              <Link to="/product">Open product catalog</Link>
+            </Button>
+          </div>
+          <div className="mt-12 grid gap-4 lg:grid-cols-3">
+            {workflowTemplates.map((template) => (
+              <Card key={template.title}>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="flex size-9 items-center justify-center rounded-[18px] bg-canvas text-ink">
+                      <template.icon className="size-4" />
+                    </span>
+                    <Badge variant="outline">{template.meta}</Badge>
+                  </div>
+                  <CardTitle>{template.title}</CardTitle>
+                  <CardDescription>{template.copy}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-2">
+                    {template.steps.map((step, index) => (
+                      <div key={step} className="flex items-center gap-2 rounded-[18px] bg-canvas px-3 py-2 text-sm">
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded-[18px] bg-paper text-xs font-medium shadow-subtle">
+                          {index + 1}
+                        </span>
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="komponen" className="py-20">
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <SectionHeading
-              eyebrow="Components"
-              title="A living style guide built from shadcn primitives."
-              copy="Tabs, Progress, Cards, Buttons, Badges, Inputs, and Dropdowns are styled through the same monochrome token layer."
+              eyebrow="Operations dashboard"
+              title="Every module reports work in a predictable operational shape."
+              copy="The dashboard keeps finance, fulfillment, and customer service in the same visual language."
             />
             <Tabs defaultValue="ops" className="overflow-hidden rounded-[24px] border border-hairline bg-paper p-4 shadow-subtle sm:p-5">
               <TabsList className="mb-4 max-w-full overflow-x-auto">
@@ -126,11 +173,21 @@ export function HomePage() {
       <section className="py-20">
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            eyebrow="Features"
-            title="Every feature is presented as a tokenized UI object."
+            eyebrow="Operational modules"
+            title="Invoice, order, customer, and catalog modules are first-class surfaces."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
+            {operationalModules.map((module) => (
+              <Card key={module.title}>
+                <CardHeader>
+                  <module.icon className="size-5 text-ink" />
+                  <Badge variant="secondary" className="w-fit">{module.metric}</Badge>
+                  <CardTitle>{module.title}</CardTitle>
+                  <CardDescription>{module.copy}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+            {features.slice(0, 2).map((feature) => (
               <Card key={feature.title}>
                 <CardHeader>
                   <feature.icon className="size-5 text-ink" />
@@ -147,8 +204,8 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1280px] gap-12 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
           <SectionHeading
             eyebrow="Workflow"
-            title="Compact steps, large-radius containers, no chromatic decoration."
-            copy="The hierarchy comes from spacing, type, and hairline borders."
+            title="From incoming record to assigned action."
+            copy="Every workflow follows a practical operational path: detect, assign, resolve, review."
           />
           <div className="space-y-3">
             {workflowSteps.map((step, index) => (
@@ -159,12 +216,62 @@ export function HomePage() {
                 <div>
                   <h3 className="font-semibold">{step}</h3>
                   <p className="mt-2 text-sm leading-[1.43] text-mid-gray">
-                    Structured as a compact operational checklist with quiet elevation.
+                    Each step stores owner, status, and timestamp so work can be audited without extra reporting.
                   </p>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="mx-auto grid max-w-[1280px] gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div>
+            <SectionHeading
+              eyebrow="Live operations"
+              title="Activity timeline for work that actually changed."
+              copy="NusaFlow surfaces action history across invoice, order, and customer modules."
+            />
+            <Card className="mt-8">
+              {activityTimeline.map((event) => (
+                <div key={event.title} className="grid gap-3 rounded-[18px] bg-canvas p-4 sm:grid-cols-[64px_1fr]">
+                  <Badge variant="outline" className="justify-center">{event.time}</Badge>
+                  <div>
+                    <p className="text-sm font-medium text-ink">{event.title}</p>
+                    <p className="mt-1 text-sm text-mid-gray">{event.copy}</p>
+                  </div>
+                </div>
+              ))}
+            </Card>
+          </div>
+          <Card>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[12px] font-medium uppercase leading-[1.33] tracking-[0.6px] text-mid-gray">
+                  Operational records
+                </p>
+                <h2 className="mt-2 text-[24px] font-semibold leading-[1.33] tracking-[-0.6px]">
+                  One queue for every business object.
+                </h2>
+              </div>
+              <Database className="size-5 text-ink" />
+            </div>
+            <div className="overflow-hidden rounded-[18px] border border-hairline">
+              {operationalRecords.map(([type, id, status, value]) => (
+                <div key={id} className="grid gap-2 border-b border-hairline bg-paper px-4 py-3 text-sm last:border-b-0 sm:grid-cols-[0.7fr_1fr_1fr_auto]">
+                  <Badge variant="secondary">{type}</Badge>
+                  <span className="font-medium text-ink">{id}</span>
+                  <span className="text-mid-gray">{status}</span>
+                  <span className="font-medium text-ink">{value}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center gap-3 rounded-[18px] bg-canvas px-3 py-2 text-sm">
+              <TimerReset className="size-4 text-mid-gray" />
+              Records are updated from workflow events and admin CMS changes.
+            </div>
+          </Card>
         </div>
       </section>
 

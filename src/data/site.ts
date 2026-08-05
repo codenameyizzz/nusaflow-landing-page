@@ -3,10 +3,14 @@ import {
   Clock3,
   CreditCard,
   FileText,
+  Inbox,
   LayoutDashboard,
   MessageSquareText,
+  Package,
   PackageCheck,
+  ReceiptText,
   ShieldCheck,
+  ShoppingCart,
   Users,
   Workflow,
   type LucideIcon,
@@ -77,6 +81,81 @@ export const features: IconContent[] = [
     copy: "Aksi penting tersimpan sebagai event kecil dengan destructive red hanya untuk revoke/delete.",
   },
 ];
+
+export const workflowTemplates: Array<IconContent & { meta: string; steps: string[] }> = [
+  {
+    icon: ReceiptText,
+    title: "Invoice follow-up",
+    meta: "Finance template",
+    copy: "Tag invoice yang jatuh tempo, kirim reminder internal, dan eskalasi piutang besar ke owner.",
+    steps: ["Detect due date H-3", "Assign finance owner", "Escalate unpaid invoices"],
+  },
+  {
+    icon: ShoppingCart,
+    title: "Order fulfillment",
+    meta: "Operations template",
+    copy: "Ubah order masuk menjadi checklist picking, packing, shipping, dan update customer otomatis.",
+    steps: ["Validate payment", "Reserve stock", "Trigger shipment note"],
+  },
+  {
+    icon: Inbox,
+    title: "Customer recovery",
+    meta: "Support template",
+    copy: "Prioritaskan komplain pelanggan, simpan konteks order, dan buat follow-up tanpa chat manual.",
+    steps: ["Classify message", "Attach order context", "Schedule follow-up"],
+  },
+];
+
+export const operationalModules: Array<IconContent & { metric: string }> = [
+  {
+    icon: ReceiptText,
+    title: "Invoice module",
+    copy: "Piutang, invoice jatuh tempo, payment status, dan cash-in harian berada di satu panel kerja.",
+    metric: "Rp84.6jt tracked",
+  },
+  {
+    icon: ShoppingCart,
+    title: "Order module",
+    copy: "Order baru, status fulfillment, shipment delay, dan retur terbuka dipantau per queue.",
+    metric: "142 ready to ship",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Customer module",
+    copy: "Inbox pelanggan, notes tim, SLA respons, dan lead follow-up tidak tercecer di chat.",
+    metric: "9 open messages",
+  },
+  {
+    icon: Package,
+    title: "Catalog module",
+    copy: "Produk dan service yang tampil ke user dikelola dari CMS admin dengan status draft/published.",
+    metric: "CMS powered",
+  },
+];
+
+export const activityTimeline = [
+  {
+    title: "Invoice INV-2408 moved to escalation",
+    copy: "Finance owner assigned after payment was overdue for 3 days.",
+    time: "09:10",
+  },
+  {
+    title: "Order ORD-884 marked ready to ship",
+    copy: "Inventory signal confirmed stock reservation and packing checklist.",
+    time: "10:35",
+  },
+  {
+    title: "Customer follow-up scheduled",
+    copy: "Support team attached order context before sending recovery note.",
+    time: "13:20",
+  },
+];
+
+export const operationalRecords = [
+  ["Invoice", "INV-2408", "Due today", "Rp12.4jt"],
+  ["Order", "ORD-884", "Ready to ship", "42 items"],
+  ["Customer", "Ayu Lestari", "Follow-up", "SLA 2h"],
+] as const;
 
 export const dashboardMetrics: Record<"ops" | "finance" | "customers", Metric[]> = {
   ops: [
