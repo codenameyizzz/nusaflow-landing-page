@@ -1,6 +1,6 @@
 # NusaFlow Landing Page
 
-Landing page React + Vite untuk belajar memakai shadcn/ui dengan style reference `design.md`: light, monochrome, compact, dan berbasis komponen UI.
+Landing page React + Vite untuk belajar memakai shadcn/ui dengan style reference `design.md`: light, monochrome, compact, dan berbasis komponen UIs.
 
 ## Menjalankan Project
 
@@ -452,16 +452,16 @@ Prinsip utama:
 
 Token utama ada di `src/index.css`.
 
-| Token | Value | Penggunaan |
-|---|---:|---|
-| `--color-canvas` | `#f5f5f5` | Background halaman, secondary surface, input fill |
-| `--color-paper` | `#ffffff` | Card, popover, modal |
-| `--color-surface-alt` | `#fafafa` | Sidebar dan section alternatif |
-| `--color-ink` | `#0a0a0a` | Heading, primary text, primary button |
-| `--color-ink-soft` | `#171717` | Filled badge/button hover |
-| `--color-mid-gray` | `#737373` | Muted text, helper text, placeholder |
-| `--color-hairline` | `#e5e5e5` | Border, card edge, input focus |
-| `--color-ember` | `#e7000b` | Destructive action saja |
+| Token                   |       Value | Penggunaan                                        |
+| ----------------------- | ----------: | ------------------------------------------------- |
+| `--color-canvas`      | `#f5f5f5` | Background halaman, secondary surface, input fill |
+| `--color-paper`       | `#ffffff` | Card, popover, modal                              |
+| `--color-surface-alt` | `#fafafa` | Sidebar dan section alternatif                    |
+| `--color-ink`         | `#0a0a0a` | Heading, primary text, primary button             |
+| `--color-ink-soft`    | `#171717` | Filled badge/button hover                         |
+| `--color-mid-gray`    | `#737373` | Muted text, helper text, placeholder              |
+| `--color-hairline`    | `#e5e5e5` | Border, card edge, input focus                    |
+| `--color-ember`       | `#e7000b` | Destructive action saja                           |
 
 Jangan menambahkan aksen warna lain kecuali benar-benar diperlukan untuk error/destructive state.
 
@@ -477,16 +477,16 @@ Project memakai fallback `Inter/system-ui` jika Geist belum tersedia. Semua inte
 
 Type scale dari `design.md`:
 
-| Role | Size | Line Height | Letter Spacing |
-|---|---:|---:|---:|
-| Caption | 12px | 1.33 | 0.6px |
-| Body | 14px | 1.43 | normal |
-| Body Large | 16px | 1.5 | normal |
-| Subheading | 18px | 1.56 | normal |
-| Heading Small | 24px | 1.33 | -0.6px |
-| Heading | 30px | 1.2 | -0.75px |
-| Heading Large | 36px | 1.11 | -0.9px |
-| Display | 48px | 1.1 | -2.4px |
+| Role          | Size | Line Height | Letter Spacing |
+| ------------- | ---: | ----------: | -------------: |
+| Caption       | 12px |        1.33 |          0.6px |
+| Body          | 14px |        1.43 |         normal |
+| Body Large    | 16px |         1.5 |         normal |
+| Subheading    | 18px |        1.56 |         normal |
+| Heading Small | 24px |        1.33 |         -0.6px |
+| Heading       | 30px |         1.2 |        -0.75px |
+| Heading Large | 36px |        1.11 |         -0.9px |
+| Display       | 48px |         1.1 |         -2.4px |
 
 ## Radius Dan Shape
 
